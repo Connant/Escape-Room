@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { MainLayout } from 'components/common/common';
 import { ReactComponent as IconClock } from 'assets/img/icon-clock.svg';
 import { ReactComponent as IconPerson } from 'assets/img/icon-person.svg';
@@ -8,13 +8,14 @@ import * as S from './detailed-quest.styled';
 import { BookingModal } from './components/components';
 
 import { fetchQuest } from 'server-api/actions-api';
+import { AppRoute } from 'const';
+import Error from 'components/error/error';
 
 const DetailedQuest = () => {
   const [selectedValue, setSelectedValue] = useState(null);
   const [isBookingModalOpened, setIsBookingModalOpened] = useState(false);
 
   const { id } = useParams();
-  // const questId = Number(id);
 
   const onBookingBtnClick = () => {
     setIsBookingModalOpened(true);
@@ -23,13 +24,14 @@ const DetailedQuest = () => {
   useEffect(() => {
     if (selectedValue === null) {
       fetchQuest(id, setSelectedValue);
-    console.log(selectedValue)
+      console.log(selectedValue)
     }
   })
 
   return (selectedValue === null ? 'Loading...' :
-
+  ((selectedValue !== -1 && !isNaN(id)) ? (
       <MainLayout>
+        {isNaN(id) ? <Redirect to={AppRoute.Error} /> : ''}
       <S.Main key={selectedValue.id}>
         <S.PageImage
           src={`/${selectedValue.coverImg}`}
@@ -72,8 +74,7 @@ const DetailedQuest = () => {
         {isBookingModalOpened && <BookingModal />}
       </S.Main>
       </MainLayout>
-    // ))}
-  );
+  ): <Error />))
 };
 
 export default DetailedQuest;

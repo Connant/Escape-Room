@@ -12,7 +12,6 @@ import { fetchAllQuests } from 'server-api/actions-api';
 import { useEffect, useState } from 'react';
 import { AppRoute } from 'const';
 
-
 const QuestsCatalog = () => {
   const [selectedValue, setSelectedValue] = useState(null);
   // const [selectQuest, setselectQuest] = useState();
@@ -23,10 +22,6 @@ const QuestsCatalog = () => {
     console.log(selectedValue)
     }
   }, [selectedValue])
-
-  // const handleChangeType = () => {
-
-  // }
 
   return (selectedValue === null ? 'Loading...' :
   <>

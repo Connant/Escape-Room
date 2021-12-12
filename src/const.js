@@ -23,5 +23,6 @@ export const questType = {
 export const AppRoute = {
   // Main: '/quests',
   Quest: '/detailed-quest/:id',
-  Contacts: '/contacts'
+  Contacts: '/contacts',
+  Error: '/404',
 }
