@@ -1,7 +1,38 @@
 import * as S from './booking-modal.styled';
 import { ReactComponent as IconClose } from 'assets/img/icon-close.svg';
+import { useEffect, useState } from 'react';
+import { sendRequest } from '../../../../server-api/actions-api'
 
-const BookingModal = () => (
+
+const BookingModal = () => {
+  const [request, setRequest] = useState();
+  const [userName, setUserName] = useState('');
+  const [peopleCount, setPeopleCount] = useState('');
+  const [userPhone, setUserPhone] = useState('');
+  const [isLegal, setIsLegal] = useState(false);
+
+  // useEffect(() => {
+  //   if (request === null) {
+  //   sendRequest(setSelectedValue);
+  //   console.log(selectedValue)
+  //   }
+  // }, [request])
+
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    const requestData = {
+      name: userName,
+      peopleCount: peopleCount,
+      phone: userPhone,
+      isLegal: isLegal
+    }
+    sendRequest(requestData);
+  }
+
+  console.log(userName, peopleCount, userPhone, isLegal)
+
+  return (
   <S.BlockLayer>
     <S.Modal>
       <S.ModalCloseBtn>
@@ -13,6 +44,7 @@ const BookingModal = () => (
         action="https://echo.htmlacademy.ru"
         method="post"
         id="booking-form"
+        onSubmit={handleSubmit}
       >
         <S.BookingField>
           <S.BookingLabel htmlFor="booking-name">Ваше Имя</S.BookingLabel>
@@ -22,6 +54,8 @@ const BookingModal = () => (
             name="booking-name"
             placeholder="Имя"
             required
+            value={userName}
+            onChange={(evt) => setUserName(evt.currentTarget.value)}
           />
         </S.BookingField>
         <S.BookingField>
@@ -34,6 +68,8 @@ const BookingModal = () => (
             name="booking-phone"
             placeholder="Телефон"
             required
+            value={userPhone}
+            onChange={(evt) => setUserPhone(evt.currentTarget.value)}
           />
         </S.BookingField>
         <S.BookingField>
@@ -46,6 +82,9 @@ const BookingModal = () => (
             name="booking-people"
             placeholder="Количество участников"
             required
+            value={peopleCount}
+            onChange={(evt) => setPeopleCount(Number.parseInt(evt.currentTarget.value))}
+            onWheel={(e) => e.target.blur()}
           />
         </S.BookingField>
         <S.BookingSubmit type="submit">Отправить заявку</S.BookingSubmit>
@@ -55,6 +94,8 @@ const BookingModal = () => (
             id="booking-legal"
             name="booking-legal"
             required
+            value={isLegal}
+            onChange={(evt) => setIsLegal(evt.currentTarget.checked)}
           />
           <S.BookingCheckboxLabel
             className="checkbox-label"
@@ -72,6 +113,6 @@ const BookingModal = () => (
       </S.BookingForm>
     </S.Modal>
   </S.BlockLayer>
-);
+)};
 
 export default BookingModal;

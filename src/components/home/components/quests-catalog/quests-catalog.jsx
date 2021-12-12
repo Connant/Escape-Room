@@ -14,7 +14,6 @@ import { AppRoute } from 'const';
 
 const QuestsCatalog = () => {
   const [selectedValue, setSelectedValue] = useState(null);
-  // const [selectQuest, setselectQuest] = useState();
 
   useEffect(() => {
     if (selectedValue === null) {

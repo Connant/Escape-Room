@@ -23,3 +23,14 @@ export async function fetchQuest(questId, setValue) {
     // console.error(error);
   }
 }
+
+export async function sendRequest(postData) {
+  try {
+    const response = await api.post('/orders', postData);
+    // postData(response.data);
+    console.log(response.data)
+  } catch (error) {
+    // return setValue(-1);
+    console.error(error);
+  }
+}
