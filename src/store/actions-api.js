@@ -1,11 +1,7 @@
 import { Redirect } from 'react-router-dom';
 import { AppRoute, APIRoute, ToastMessage } from "const";
 import { toast } from 'react-toastify';
-import {
-  loadQuest,
-  loadQuests,
-  redirectToRoute,
-} from './actions';
+import { loadQuest, loadQuests, redirectToRoute} from './actions';
 
 export const fetchAllQuests = () =>
   async (dispatch, _getStore, api) => {
@@ -24,7 +20,11 @@ export const fetchQuest = (questId) =>
       const { data } = await api.get(APIRoute.QUEST.replace(':id', `${questId}`));
       dispatch(loadQuest(data));
     } catch {
+      console.log(questId);
       dispatch(redirectToRoute(APIRoute.NOT_FOUND));
+      toast.error(ToastMessage.QUEST, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 
@@ -32,9 +32,10 @@ export const sendRequest = (postData) =>
   async (_dispatch, _getStore, api) => {
     try {
       await api.post(APIRoute.ORDERS, postData);
-      toast.info(ToastMessage.SUCCESS);
     } catch {
-      toast.error(ToastMessage.ERROR);
+      toast.error(ToastMessage.ERROR, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 

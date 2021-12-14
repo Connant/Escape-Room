@@ -81,6 +81,7 @@ export const LevelOfDifficultyAdapt = {
 };
 
 export const ToastMessage = {
+  QUEST: 'Sorry, there is no such quest',
   ERROR: 'Sorry, the server is not available at the moment. Please try again later.',
   SUCCESS: 'Fine! Your application has been accepted for processing',
   PHONE: 'Sorry, phone number must be digits and must be at least 10 characters',

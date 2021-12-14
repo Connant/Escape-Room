@@ -1,21 +1,18 @@
 import { ThemeProvider } from 'styled-components';
-import {
-  Switch,
-  Route,
-  BrowserRouter as Router,
-} from 'components/common/common';
+import { Router, Switch, Route } from 'react-router-dom';
 import DetailedQuest from 'components/detailed-quest/detailed-quest';
 import Contacts from 'components/contacts/contacts';
 import Home from 'components/home/home';
 import Error from 'components/error/error';
 import { appTheme } from './common';
 import * as S from './app.styled';
+import { browserHistory } from 'store/browser-history';
 import { AppRoute } from 'const';
 
 const App = () => (
   <ThemeProvider theme={appTheme}>
     <S.GlobalStyle />
-    <Router>
+    <Router history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.Quest}>
           <DetailedQuest />

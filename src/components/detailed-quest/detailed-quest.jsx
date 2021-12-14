@@ -23,12 +23,6 @@ const DetailedQuest = () => {
   const { id } = useParams();
   const questId = Number(id);
 
-  useEffect(() => {
-    if (actualQuest.id !== questId) {
-      dispatch(fetchQuest(questId));
-    }
-  });
-
   const onBookingBtnClick = () => {
     setIsBookingModalOpened(true);
   };
@@ -37,8 +31,28 @@ const DetailedQuest = () => {
     setIsBookingModalOpened(false);
   };
 
-  return (Object.entries(actualQuest).length === 0 ? 'Loading...' :
-  ((!isNaN(id)) ? (
+  useEffect(() => {
+    if (isNaN(questId)) {
+      return function cleanup() {
+        <Redirect to={AppRoute.Error} />;
+      };
+    }
+    if (actualQuest.id !== questId) {
+      dispatch(fetchQuest(questId));
+    }
+  });
+
+  if (!actualQuest && actualQuest.id !== questId) {
+    return <Error />;
+  }
+
+  if (actualQuest.id !== questId) {
+    return (
+      'Loading...'
+    );
+  }
+
+  return (
       <MainLayout>
         {isNaN(id) ? <Redirect to={AppRoute.Error} /> : ''}
       <S.Main key={id}>
@@ -83,7 +97,7 @@ const DetailedQuest = () => {
         {isBookingModalOpened && <BookingModal onExitEvent={onExitEvent} />}
       </S.Main>
       </MainLayout>
-  ): <Error />))
+  )
 };
 
 export default DetailedQuest;
