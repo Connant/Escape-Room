@@ -1,41 +1,54 @@
 import * as S from './booking-modal.styled';
 import { ReactComponent as IconClose } from 'assets/img/icon-close.svg';
-import { useEffect, useState } from 'react';
-import { sendRequest } from '../../../../server-api/actions-api'
+import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { validatePhone, validatePeopleCount } from 'utils';
+import { ToastMessage } from 'const';
+import { sendRequest } from 'store/actions-api'
+import 'react-toastify/dist/ReactToastify.css';
 
+const BookingModal = ({onExitEvent}) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    peopleCount: null,
+    phone: '',
+    isLegal: false,
+  });
 
-const BookingModal = () => {
-  const [request, setRequest] = useState();
-  const [userName, setUserName] = useState('');
-  const [peopleCount, setPeopleCount] = useState('');
-  const [userPhone, setUserPhone] = useState('');
-  const [isLegal, setIsLegal] = useState(false);
-
-  // useEffect(() => {
-  //   if (request === null) {
-  //   sendRequest(setSelectedValue);
-  //   console.log(selectedValue)
-  //   }
-  // }, [request])
-
+  const dispatch = useDispatch();
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    const requestData = {
-      name: userName,
-      peopleCount: peopleCount,
-      phone: userPhone,
-      isLegal: isLegal
-    }
-    sendRequest(requestData);
-  }
 
-  console.log(userName, peopleCount, userPhone, isLegal)
+    const isPhoneValid = validatePhone(formData.phone);
+    const isPeopleCountValid = validatePeopleCount(formData.peopleCount);
+
+    if (!isPhoneValid) {
+      return (toast.info(ToastMessage.PHONE, {
+        position: toast.POSITION.TOP_CENTER,
+      }));
+    }
+
+    if (!isPeopleCountValid) {
+      return (toast.info(ToastMessage.PEOPLE_COUNT, {
+        position: toast.POSITION.TOP_CENTER,
+      }));
+    }
+
+    if (isPhoneValid && isPeopleCountValid) {
+      dispatch(sendRequest(formData));
+      onExitEvent();
+      toast.info(ToastMessage.SUCCESS, {
+        position: toast.POSITION.TOP_CENTER,
+      })
+    }
+  };
 
   return (
   <S.BlockLayer>
     <S.Modal>
-      <S.ModalCloseBtn>
+      <S.ModalCloseBtn onClick={onExitEvent}>
         <IconClose width="16" height="16" />
         <S.ModalCloseLabel>Закрыть окно</S.ModalCloseLabel>
       </S.ModalCloseBtn>
@@ -54,8 +67,7 @@ const BookingModal = () => {
             name="booking-name"
             placeholder="Имя"
             required
-            value={userName}
-            onChange={(evt) => setUserName(evt.currentTarget.value)}
+            onInput={(evt) => setFormData({...formData, name: evt.target.value})}
           />
         </S.BookingField>
         <S.BookingField>
@@ -68,8 +80,7 @@ const BookingModal = () => {
             name="booking-phone"
             placeholder="Телефон"
             required
-            value={userPhone}
-            onChange={(evt) => setUserPhone(evt.currentTarget.value)}
+            onInput={(evt) => setFormData({...formData, phone: evt.target.value})}
           />
         </S.BookingField>
         <S.BookingField>
@@ -82,9 +93,7 @@ const BookingModal = () => {
             name="booking-people"
             placeholder="Количество участников"
             required
-            value={peopleCount}
-            onChange={(evt) => setPeopleCount(Number.parseInt(evt.currentTarget.value))}
-            onWheel={(e) => e.target.blur()}
+            onInput={(evt) => setFormData({...formData, peopleCount: +evt.target.value})}
           />
         </S.BookingField>
         <S.BookingSubmit type="submit">Отправить заявку</S.BookingSubmit>
@@ -94,8 +103,7 @@ const BookingModal = () => {
             id="booking-legal"
             name="booking-legal"
             required
-            value={isLegal}
-            onChange={(evt) => setIsLegal(evt.currentTarget.checked)}
+            onChange={() => setFormData({...formData, isLegal: !formData.isLegal})}
           />
           <S.BookingCheckboxLabel
             className="checkbox-label"

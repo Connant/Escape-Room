@@ -1,76 +1,40 @@
-import { ReactComponent as IconAllQuests } from 'assets/img/icon-all-quests.svg';
-import { ReactComponent as IconAdventures } from 'assets/img/icon-adventures.svg';
-import { ReactComponent as IconHorrors } from 'assets/img/icon-horrors.svg';
-import { ReactComponent as IconMystic } from 'assets/img/icon-mystic.svg';
-import { ReactComponent as IconDetective } from 'assets/img/icon-detective.svg';
-import { ReactComponent as IconScifi } from 'assets/img/icon-scifi.svg';
 import { ReactComponent as IconPerson } from 'assets/img/icon-person.svg';
 import { ReactComponent as IconPuzzle } from 'assets/img/icon-puzzle.svg';
 import * as S from './quests-catalog.styled';
 
-import { fetchAllQuests } from 'server-api/actions-api';
-import { useEffect, useState } from 'react';
-import { AppRoute } from 'const';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeGenre } from 'store/actions'
+import { getQuests, getActualGenre } from 'store/selectors';
+import { AppRoute, LevelOfDifficultyAdapt, QuestType } from 'const';
+import { filterQuestsByType } from 'utils';
+import QuestGenre from './quest-genre';
 
 const QuestsCatalog = () => {
-  const [selectedValue, setSelectedValue] = useState(null);
+  const quests = useSelector(getQuests);
+  const actualGenre = useSelector(getActualGenre);
+  const dispatch = useDispatch();
+  const [sortedQuests, setSortedQuests] = useState([]);
 
   useEffect(() => {
-    if (selectedValue === null) {
-    fetchAllQuests(setSelectedValue);
-    console.log(selectedValue)
+    if (!sortedQuests.length) {
+      dispatch(changeGenre(QuestType.ALL));
     }
-  }, [selectedValue])
+  })
 
-  return (selectedValue === null ? 'Loading...' :
-  <>
-    <S.Tabs>
-      <S.TabItem>
-        <S.TabBtn isActive>
-          <IconAllQuests />
-          <S.TabTitle>Все квесты</S.TabTitle>
-        </S.TabBtn>
-      </S.TabItem>
+  useEffect(() => {
+    setSortedQuests(filterQuestsByType(quests, actualGenre));
+  }, [actualGenre, quests]);
 
-      <S.TabItem>
-        <S.TabBtn>
-          <IconAdventures />
-          <S.TabTitle>Приключения</S.TabTitle>
-        </S.TabBtn>
-      </S.TabItem>
 
-      <S.TabItem>
-        <S.TabBtn>
-          <IconHorrors />
-          <S.TabTitle>Ужасы</S.TabTitle>
-        </S.TabBtn>
-      </S.TabItem>
+  return (
+  <React.Fragment>
 
-      <S.TabItem>
-        <S.TabBtn>
-          <IconMystic />
-          <S.TabTitle>Мистика</S.TabTitle>
-        </S.TabBtn>
-      </S.TabItem>
-
-      <S.TabItem>
-        <S.TabBtn>
-          <IconDetective />
-          <S.TabTitle>Детектив</S.TabTitle>
-        </S.TabBtn>
-      </S.TabItem>
-
-      <S.TabItem>
-        <S.TabBtn>
-          <IconScifi />
-          <S.TabTitle>Sci-fi</S.TabTitle>
-        </S.TabBtn>
-      </S.TabItem>
-    </S.Tabs>
+    <QuestGenre />
 
     <S.QuestsList>
 
-    {selectedValue.map((quest) => (
+    {sortedQuests.map((quest) => (
       <S.QuestItem key={quest.id}>
         <S.QuestItemLink to={AppRoute.Quest.replace(':id', `${quest.id}`)}>
           <S.Quest>
@@ -91,7 +55,7 @@ const QuestsCatalog = () => {
                 </S.QuestFeatureItem>
                 <S.QuestFeatureItem>
                   <IconPuzzle />
-                  {quest.level}
+                  {LevelOfDifficultyAdapt[quest.level.toUpperCase()]}
                 </S.QuestFeatureItem>
               </S.QuestFeatures>
             </S.QuestContent>
@@ -100,7 +64,7 @@ const QuestsCatalog = () => {
       </S.QuestItem>
     ))}
     </S.QuestsList>
-  </>
+  </React.Fragment>
   )};
 
 export default QuestsCatalog;
