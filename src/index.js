@@ -5,15 +5,17 @@ import { ToastContainer } from 'react-toastify';
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer } from 'store/reducer';
 import { redirect } from 'store/redirect';
-import { fetchAllQuests } from './store/actions-api'
-import { api } from './server-api/api';
+import { fetchAllQuests } from './api/actions-api'
+import { api } from './api/api';
 import App from 'components/app/app';
 
 const store = configureStore({
   reducer: reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      thunk: { extraArgument: api },
+      thunk: {
+        extraArgument: api
+      },
     }).concat(redirect),
 });
 

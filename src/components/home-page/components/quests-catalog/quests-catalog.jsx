@@ -7,14 +7,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { changeGenre } from 'store/actions'
 import { getQuests, getActualGenre } from 'store/selectors';
 import { AppRoute, LevelOfDifficultyAdapt, QuestType } from 'const';
-import { filterQuestsByType } from 'utils';
-import QuestGenre from './quest-genre';
+import QuestGenre from './quest-genre/quest-genre';
 
 const QuestsCatalog = () => {
   const quests = useSelector(getQuests);
   const actualGenre = useSelector(getActualGenre);
   const dispatch = useDispatch();
   const [sortedQuests, setSortedQuests] = useState([]);
+
+  const filterQuestsByType = (quests, type) => {
+    if (type === QuestType.ALL) {
+      return quests;
+    }
+    return quests.filter((quest) => quest.type === type);
+  };
 
   useEffect(() => {
     if (!sortedQuests.length) {

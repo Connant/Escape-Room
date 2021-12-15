@@ -67,24 +67,24 @@ export const QuestType = {
 }
 
 export const QuestTypeAdapt = {
-  ADVENTURES: 'приключения',
-  HORROR: 'ужасы',
-  MYSTIC: 'мистика',
-  DETECTIVE: 'детектив',
-  SCI_FI: 'sci-fi',
+  'adventures': 'Приключения',
+  'horror': 'Ужасы',
+  'mystic': 'Мистика',
+  'detective': 'Детектив',
+  'sci-fi': 'Sci-fi',
 }
 
 export const LevelOfDifficultyAdapt = {
-  HARD: 'сложный',
-  MEDIUM: 'средний',
-  EASY: 'простой',
+  HARD: 'Сложный',
+  MEDIUM: 'Средний',
+  EASY: 'Простой',
 };
 
 export const ToastMessage = {
-  QUEST: 'Sorry, there is no such quest',
-  ERROR: 'Sorry, the server is not available at the moment. Please try again later.',
-  SUCCESS: 'Fine! Your application has been accepted for processing',
-  PHONE: 'Sorry, phone number must be digits and must be at least 10 characters',
-  PEOPLE_COUNT: 'The number of participants cannot be equal to 0',
+  QUEST: 'Извините, квесты не найдены',
+  ERROR: 'Извините, в настоящий момент сервер недоступен, попробуйте позже',
+  SUCCESS: 'Отлично! Ваша заявка отправлена!',
+  PHONE: 'Телефонный номер должен состоять из цифр и иметь 10 сиволов',
+  PEOPLE_COUNT: 'Количество людей не может быть равно 0',
 };
 

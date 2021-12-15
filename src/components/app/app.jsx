@@ -1,8 +1,8 @@
 import { ThemeProvider } from 'styled-components';
-import { Router, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import DetailedQuest from 'components/detailed-quest/detailed-quest';
 import Contacts from 'components/contacts/contacts';
-import Home from 'components/home/home';
+import Home from 'components/home-page/home-page';
 import Error from 'components/error/error';
 import { appTheme } from './common';
 import * as S from './app.styled';
@@ -25,6 +25,7 @@ const App = () => (
         </Route>
         <Route>
           <Error />
+          <Redirect to="/404" />
         </Route>
       </Switch>
     </Router>

@@ -5,14 +5,14 @@ import {
   PageSubtext,
 } from 'components/common/common';
 import { QuestsCatalog } from './components/components';
-import * as S from './home.styled';
+import * as S from './home-page.styled';
 
 const HomePage = () => (
   <MainLayout>
     <S.Main forwardedAs="main">
       <PageHeading>
         <PageTitle>Выберите тематику</PageTitle>
-        <PageSubtext>квесты в Санкт-Петербурге</PageSubtext>
+        <PageSubtext>Квесты в Санкт-Петербурге</PageSubtext>
       </PageHeading>
       <QuestsCatalog />
     </S.Main>

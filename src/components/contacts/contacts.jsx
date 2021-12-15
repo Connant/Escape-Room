@@ -9,7 +9,7 @@ const Contacts = () => (
       <S.ContentWrapper>
         <S.PageHeading>
           <PageTitle>Контакты</PageTitle>
-          <PageSubtext>квесты в Санкт-Петербурге</PageSubtext>
+          <PageSubtext>Квесты в Санкт-Петербурге</PageSubtext>
         </S.PageHeading>
 
         <S.Contacts>

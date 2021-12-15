@@ -8,10 +8,9 @@ import { ReactComponent as IconPuzzle } from 'assets/img/icon-puzzle.svg';
 import * as S from './detailed-quest.styled';
 import { BookingModal } from './components/components';
 
-import { fetchQuest } from 'store/actions-api';
+import { fetchQuest } from 'api/actions-api';
 import { AppRoute, QuestTypeAdapt, LevelOfDifficultyAdapt } from 'const';
 import { getActualQuest } from 'store/selectors';
-import Error from 'components/error/error';
 
 
 const DetailedQuest = () => {
@@ -32,18 +31,13 @@ const DetailedQuest = () => {
   };
 
   useEffect(() => {
-    if (isNaN(questId)) {
-      return function cleanup() {
-        <Redirect to={AppRoute.Error} />;
-      };
-    }
     if (actualQuest.id !== questId) {
       dispatch(fetchQuest(questId));
     }
   });
 
-  if (!actualQuest && actualQuest.id !== questId) {
-    return <Error />;
+  if (isNaN(questId)) {
+    return <Redirect to={AppRoute.Error} />;
   }
 
   if (actualQuest.id !== questId) {

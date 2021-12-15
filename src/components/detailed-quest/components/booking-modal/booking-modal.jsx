@@ -3,13 +3,12 @@ import { ReactComponent as IconClose } from 'assets/img/icon-close.svg';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { validatePhone, validatePeopleCount } from 'utils';
 import { ToastMessage } from 'const';
-import { sendRequest } from 'store/actions-api'
+import { sendRequest } from 'api/actions-api'
 import 'react-toastify/dist/ReactToastify.css';
 
 const BookingModal = ({onExitEvent}) => {
-  const [formData, setFormData] = useState({
+  const [formInfo, setFormInfo] = useState({
     name: '',
     peopleCount: null,
     phone: '',
@@ -18,26 +17,33 @@ const BookingModal = ({onExitEvent}) => {
 
   const dispatch = useDispatch();
 
+  const validatePeople = (peopleCount) => {
+    return peopleCount > 0;
+  };
+  const validatePhone = (phone) => {
+    return /^[0-9]{10}$/.test(phone);
+  };
+
+  const peopleValid = validatePeople(formInfo.peopleCount);
+  const phoneValid = validatePhone(formInfo.phone);
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    const isPhoneValid = validatePhone(formData.phone);
-    const isPeopleCountValid = validatePeopleCount(formData.peopleCount);
-
-    if (!isPhoneValid) {
+    if (!phoneValid) {
       return (toast.info(ToastMessage.PHONE, {
         position: toast.POSITION.TOP_CENTER,
       }));
     }
 
-    if (!isPeopleCountValid) {
+    if (!peopleValid) {
       return (toast.info(ToastMessage.PEOPLE_COUNT, {
         position: toast.POSITION.TOP_CENTER,
       }));
     }
 
-    if (isPhoneValid && isPeopleCountValid) {
-      dispatch(sendRequest(formData));
+    if (phoneValid && peopleValid) {
+      dispatch(sendRequest(formInfo));
       onExitEvent();
       toast.info(ToastMessage.SUCCESS, {
         position: toast.POSITION.TOP_CENTER,
@@ -67,7 +73,7 @@ const BookingModal = ({onExitEvent}) => {
             name="booking-name"
             placeholder="Имя"
             required
-            onInput={(evt) => setFormData({...formData, name: evt.target.value})}
+            onInput={(evt) => setFormInfo({...formInfo, name: evt.target.value})}
           />
         </S.BookingField>
         <S.BookingField>
@@ -80,7 +86,7 @@ const BookingModal = ({onExitEvent}) => {
             name="booking-phone"
             placeholder="Телефон"
             required
-            onInput={(evt) => setFormData({...formData, phone: evt.target.value})}
+            onInput={(evt) => setFormInfo({...formInfo, phone: evt.target.value})}
           />
         </S.BookingField>
         <S.BookingField>
@@ -93,7 +99,8 @@ const BookingModal = ({onExitEvent}) => {
             name="booking-people"
             placeholder="Количество участников"
             required
-            onInput={(evt) => setFormData({...formData, peopleCount: +evt.target.value})}
+            onInput={(evt) => setFormInfo({...formInfo, peopleCount: +evt.target.value})}
+            onWheel={(e) => e.target.blur()}
           />
         </S.BookingField>
         <S.BookingSubmit type="submit">Отправить заявку</S.BookingSubmit>
@@ -103,7 +110,7 @@ const BookingModal = ({onExitEvent}) => {
             id="booking-legal"
             name="booking-legal"
             required
-            onChange={() => setFormData({...formData, isLegal: !formData.isLegal})}
+            onChange={() => setFormInfo({...formInfo, isLegal: !formInfo.isLegal})}
           />
           <S.BookingCheckboxLabel
             className="checkbox-label"

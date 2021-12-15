@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getActualGenre } from 'store/selectors';
 import { changeGenre } from 'store/actions';
 import { QuestType, tabTypes, icons } from 'const';
-import * as S from './quests-catalog.styled';
+import * as S from './quest-genre.styled';
 
 const QuestGenre = () => {
   const actualGenre = useSelector(getActualGenre);
